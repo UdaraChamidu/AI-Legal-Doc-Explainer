@@ -3,3 +3,7 @@ backend/env
 backend/.env
 
 # frontend
+frontend1/node_modules
+frontend1/build
+frontend1/.env
+

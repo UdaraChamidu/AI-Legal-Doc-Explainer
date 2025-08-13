@@ -1,35 +1,77 @@
-import os
 from fastapi import FastAPI, UploadFile, File
-import fitz  # PyMuPDF
-import google.generativeai as genai
+from pydantic import BaseModel
+import fitz
+import os
 from dotenv import load_dotenv
+import google.generativeai as genai
+from fastapi.middleware.cors import CORSMiddleware
+
 
 load_dotenv()
+genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
 
 app = FastAPI()
 
-GEN_API_KEY = os.getenv("GEMINI_API_KEY")
-if not GEN_API_KEY:
-    raise ValueError("GEMINI_API_KEY not found in environment variables")
-genai.configure(api_key=GEN_API_KEY)
-
-model = genai.GenerativeModel("gemini-2.5-flash")
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Allow all origins for now
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+# Store last uploaded text for Q&A
+DOCUMENT_TEXT = ""
 
 def extract_text_from_pdf(file_bytes):
     doc = fitz.open(stream=file_bytes, filetype="pdf")
-    return "".join(page.get_text() for page in doc)
+    full_text = ""
+    for page in doc:
+        full_text += page.get_text()
+    return full_text
+
+def gemini_summarize(text):
+    prompt = f"""
+    Summarize this legal document in simple, easy-to-understand language.
+    Also, extract key clauses and highlight any risks or red flags.
+    Document:
+    {text}
+    """
+    model = genai.GenerativeModel("gemini-2.5-flash")
+    response = model.generate_content(prompt)
+    return response.text
+
+def gemini_answer(question, context):
+    prompt = f"""
+    You are an AI legal assistant. Based on the document below, answer the user's question clearly.
+    If not sure, say you are not certain.
+    Document:
+    {context}
+
+    Question: {question}
+    """
+    model = genai.GenerativeModel("gemini-pro")
+    response = model.generate_content(prompt)
+    return response.text
 
 @app.post("/upload-pdf/")
 async def upload_pdf(file: UploadFile = File(...)):
+    global DOCUMENT_TEXT
     contents = await file.read()
-    document_text = extract_text_from_pdf(contents)
+    DOCUMENT_TEXT = extract_text_from_pdf(contents)
+    summary_output = gemini_summarize(DOCUMENT_TEXT)
 
-    prompt_text = (
-        "You are a helpful AI that summarizes legal documents in simple, clear language.\n\n"
-        "Document Text:\n" + document_text + "\n\nSummary:"
-    )
+    # Very simple text split — ideally parse JSON from AI
+    return {
+        "summary": summary_output,
+        "highlights": ["Example clause 1", "Example clause 2"],  # Replace with parsed
+        "risks": ["Example risk 1", "Example risk 2"]           # Replace with parsed
+    }
 
-    response = model.generate_content(prompt_text)
-    summary = response.text.strip()
+class QuestionRequest(BaseModel):
+    question: str
 
-    return {"filename": file.filename, "summary": summary}
+@app.post("/ask/")
+async def ask_question(req: QuestionRequest):
+    global DOCUMENT_TEXT
+    answer = gemini_answer(req.question, DOCUMENT_TEXT)
+    return {"answer": answer}

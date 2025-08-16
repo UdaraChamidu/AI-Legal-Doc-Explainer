@@ -121,3 +121,7 @@ uvicorn app:app --reload
 ### chatting part
 <img width="1528" height="813" alt="image" src="https://github.com/user-attachments/assets/54aff81a-2249-4dc3-aaa1-67b3c6084fbc" />
 
+## Collabarators
+- Ashan Sanjana
+- 
+- 

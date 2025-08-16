@@ -1,4 +1,5 @@
 import React from "react";
+import ReactMarkdown from "react-markdown";
 
 function SummaryView({ summary, highlights, risks }) {
   return (
@@ -12,27 +13,41 @@ function SummaryView({ summary, highlights, risks }) {
         backgroundColor: "#f5f5f5",
       }}
     >
-      <h2 style={{ borderBottom: "1px solid #ccc", paddingBottom: "5px" }}>Summary</h2>
-      <p>{summary}</p>
+      <h2 style={{ borderBottom: "1px solid #ccc", paddingBottom: "5px" }}>
+        Summary
+      </h2>
+      <ReactMarkdown>{summary || "No summary available."}</ReactMarkdown>
 
-      <h2 style={{ borderBottom: "1px solid #ccc", paddingBottom: "5px", marginTop: "15px" }}>Key Clauses</h2>
+      <h2
+        style={{
+          borderBottom: "1px solid #ccc",
+          paddingBottom: "5px",
+          marginTop: "15px",
+        }}
+      >
+        Key Clauses
+      </h2>
       {highlights.length > 0 ? (
-        <ul>
-          {highlights.map((clause, idx) => (
-            <li key={idx}>{clause}</li>
-          ))}
-        </ul>
+        highlights.map((clause, idx) => (
+          <ReactMarkdown key={idx}>{`- ${clause}`}</ReactMarkdown>
+        ))
       ) : (
         <p>No key clauses identified.</p>
       )}
 
-      <h2 style={{ borderBottom: "1px solid #ccc", paddingBottom: "5px", marginTop: "15px" }}>Risks / Red Flags</h2>
+      <h2
+        style={{
+          borderBottom: "1px solid #ccc",
+          paddingBottom: "5px",
+          marginTop: "15px",
+        }}
+      >
+        Risks / Red Flags
+      </h2>
       {risks.length > 0 ? (
-        <ul>
-          {risks.map((risk, idx) => (
-            <li key={idx}>{risk}</li>
-          ))}
-        </ul>
+        risks.map((risk, idx) => (
+          <ReactMarkdown key={idx}>{`- ${risk}`}</ReactMarkdown>
+        ))
       ) : (
         <p>No major risks detected.</p>
       )}

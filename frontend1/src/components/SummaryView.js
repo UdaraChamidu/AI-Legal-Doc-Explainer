@@ -1,20 +1,34 @@
 import React from "react";
 
-export default function SummaryView({ summary, highlights, risks }) {
+function SummaryView({ summary, highlights, risks }) {
   return (
-    <div style={{ padding: "10px" }}>
-      <h3>Summary</h3>
+    <div className="summary-view">
+      <h2>Summary</h2>
       <p>{summary}</p>
 
-      <h3>Key Clauses</h3>
-      <ul>
-        {highlights?.map((clause, i) => <li key={i}>{clause}</li>)}
-      </ul>
+      <h2>Key Clauses</h2>
+      {highlights.length > 0 ? (
+        <ul>
+          {highlights.map((clause, idx) => (
+            <li key={idx}>{clause}</li>
+          ))}
+        </ul>
+      ) : (
+        <p>No key clauses identified.</p>
+      )}
 
-      <h3>Risks / Red Flags</h3>
-      <ul>
-        {risks?.map((risk, i) => <li key={i}>{risk}</li>)}
-      </ul>
+      <h2>Risks / Red Flags</h2>
+      {risks.length > 0 ? (
+        <ul>
+          {risks.map((risk, idx) => (
+            <li key={idx}>{risk}</li>
+          ))}
+        </ul>
+      ) : (
+        <p>No major risks detected.</p>
+      )}
     </div>
   );
 }
+
+export default SummaryView;

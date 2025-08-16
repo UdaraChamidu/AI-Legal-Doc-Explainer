@@ -122,7 +122,7 @@ def gemini_answer(question, context):
         }
     return parsed
 
-
+ 
 @app.post("/upload-pdf/")
 async def upload_pdf(file: UploadFile = File(...)):
     """

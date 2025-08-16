@@ -3,30 +3,33 @@ import { uploadPDF } from "../api";
 
 export default function FileUpload({ onResult }) {
   const [file, setFile] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [uploadedFileName, setUploadedFileName] = useState(null);
   const fileInputRef = useRef(null);
 
   const handleFileSelect = (e) => {
     setFile(e.target.files[0]);
+    setUploadedFileName(null); // reset after selecting new file
   };
 
   const handleUpload = async () => {
     if (!file) return alert("Please select a PDF file!");
+    setLoading(true);
+
     try {
       const result = await uploadPDF(file);
       onResult(result);
+      setUploadedFileName(file.name);
     } catch (err) {
       console.error("Upload failed", err);
       alert("Error uploading file. Check console.");
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <div
-      style={{
-        marginBottom: "30px",
-        textAlign: "center",
-      }}
-    >
+    <div style={{ marginBottom: "30px", textAlign: "center" }}>
       {/* User-friendly description */}
       <p
         style={{
@@ -36,13 +39,13 @@ export default function FileUpload({ onResult }) {
           lineHeight: "1.5",
         }}
       >
-        Welcome ! This AI Legal Document Explainer helps you quickly analyze
-        your legal PDFs. Simply upload your document to get a{" "}
-        <b>clear summary</b>, identify <b>key clauses</b> and{" "}
-        <b>potential risks</b>, and <b>ask questions</b> in natural language.
-        Our AI provides easy to understand answers, highlights important points,
-        and even presents information in lists, paragraphs or tables for better
-        clarity.
+        Welcome! This AI Legal Document Explainer helps you quickly analyze your
+        legal PDFs. Simply upload your document to get a <b>clear summary</b>,
+        identify <b>key clauses</b> and <b>potential risks</b>, and{" "}
+        <b>ask questions</b>
+        in natural language. Our AI provides easy-to-understand answers,
+        highlights important points, and presents information in lists,
+        paragraphs, or tables for better clarity.
       </p>
 
       {/* Buttons container */}
@@ -92,9 +95,25 @@ export default function FileUpload({ onResult }) {
             fontSize: "14px",
           }}
         >
-          Upload & Process
+          Process
         </button>
       </div>
+
+      {/* Upload progress */}
+      {loading && (
+        <p style={{ color: "#1976d2", marginTop: "10px" }}>
+          Uploading PDF, please wait...
+        </p>
+      )}
+
+      {/* Uploaded file confirmation */}
+      {uploadedFileName && !loading && (
+        <p style={{ color: "#4caf50", marginTop: "10px" }}>
+          Your PDF <strong>{uploadedFileName}</strong> was processed
+          successfully. Now can see <strong>Details</strong> and{" "}
+          <strong>chat</strong>.
+        </p>
+      )}
     </div>
   );
 }

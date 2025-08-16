@@ -96,7 +96,8 @@ def gemini_answer(question, context):
     - Use paragraphs, bullet points, numbered lists, or tables where appropriate.
     - Be clear, professional, and user-friendly.
     - If uncertain, say "I'm not certain, please consult a lawyer."
-    
+    - behave in a user-friendly manner.
+
     Return ONLY the answer in Markdown format (no JSON, no extra text).
 
     Document:

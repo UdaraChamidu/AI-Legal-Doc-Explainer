@@ -91,9 +91,11 @@ def gemini_answer(question, context):
     """
     prompt = f"""
     You are an AI legal assistant.
-    Answer the user's question based strictly on the given document context.
-    Be clear and concise.
-    If uncertain, say "I'm not certain, please consult a lawyer."
+    - Answer the user's question based strictly on the given document context.
+    - Be clear and concise.
+    - If uncertain, say "I'm not certain, please consult a lawyer."
+    - Behave in a user-friendly manner.
+    - Use a professional way to give answers like using paragraphs, points, lists, or tables.
 
     Return JSON only in this format:
     {{
@@ -109,7 +111,7 @@ def gemini_answer(question, context):
     Question: {question}
     """
 
-    model = genai.GenerativeModel("gemini-pro")
+    model = genai.GenerativeModel("gemini-2.5-flash")
     response = model.generate_content(prompt)
 
     parsed = safe_json_loads(response.text)

@@ -84,7 +84,6 @@ def gemini_summarize(text):
         }
     return parsed
 
-
 def gemini_answer(question, context):
     """
     Use Gemini to answer user questions based on uploaded document.
@@ -96,6 +95,7 @@ def gemini_answer(question, context):
     - If uncertain, say "I'm not certain, please consult a lawyer."
     - Behave in a user-friendly manner.
     - Use a professional way to give answers like using paragraphs, points, lists, or tables.
+    - use paragraphs, points, lists, or tables to format the answer.
 
     Return JSON only in this format:
     {{
@@ -122,7 +122,6 @@ def gemini_answer(question, context):
         }
     return parsed
 
- 
 @app.post("/upload-pdf/")
 async def upload_pdf(file: UploadFile = File(...)):
     """
@@ -134,10 +133,8 @@ async def upload_pdf(file: UploadFile = File(...)):
     summary_output = gemini_summarize(DOCUMENT_TEXT)
     return summary_output
 
-
 class QuestionRequest(BaseModel):
     question: str
-
 
 @app.post("/ask/")
 async def ask_question(req: QuestionRequest):
@@ -147,3 +144,5 @@ async def ask_question(req: QuestionRequest):
     global DOCUMENT_TEXT
     answer = gemini_answer(req.question, DOCUMENT_TEXT)
     return answer
+
+

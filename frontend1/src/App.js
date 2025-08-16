@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import FileUpload from "./components/FileUpload";
 import SummaryView from "./components/SummaryView";
 import QASection from "./components/QASection";
+import "./App.css"; // optional for extra styling
 
 function App() {
   const [result, setResult] = useState(null);
@@ -10,7 +11,6 @@ function App() {
   const handleResult = (data) => {
     let parsed = data;
 
-    // If backend sends a stringified JSON, parse it
     if (typeof data === "string") {
       try {
         parsed = JSON.parse(data);
@@ -23,9 +23,11 @@ function App() {
   };
 
   return (
-    <div className="app-container">
-      <h1>AI Legal Document Explainer</h1>
+    <div className="app-container" style={{ maxWidth: "900px", margin: "auto", fontFamily: "Arial, sans-serif" }}>
+      <h1 style={{ textAlign: "center", marginBottom: "20px" }}>AI Legal Document Explainer</h1>
+
       <FileUpload onResult={handleResult} />
+
       {result && (
         <>
           <SummaryView

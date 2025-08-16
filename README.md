@@ -2,7 +2,7 @@
 
 **AI Legal Document Explainer** is a web application that allows users to upload legal documents (like contracts, lease agreements, or terms & conditions) and get a simplified explanation of the content using AI. It also highlights important clauses, risks, and allows you to ask specific questions about the document.
 
-## Try : ai-legal-doc-explainer-two.vercel.app
+## Try : https://ai-legal-doc-explainer-two.vercel.app
 ---
 
 ## 🌟 Features
@@ -52,9 +52,9 @@
 AI-Legal-Doc-Explainer/
 │
 ├─ backend/
-│ ├─ app.py # FastAPI backend
-│ ├─ requirements.txt # Python dependencies
-│ └─ .env # Environment variables (GEMINI_API_KEY)
+│ ├─ app.py 
+│ ├─ requirements.txt 
+│ └─ .env 
 │
 ├─ frontend/
 │ ├─ src/
@@ -78,7 +78,6 @@ cd frontend
 npm install axios
 npm install
 npm start
-
 ```
 
 ### backend
@@ -89,26 +88,21 @@ env\Scripts\activate
 GEMINI_API_KEY=your_api_key_here
 uvicorn app:app --reload
 (uvicorn app:app --reload --port 8000)
-
 ```
 
 ## 🖥 How to Use
 
 1. Open the frontend app in your browser.
-
 2. Upload a legal PDF document using the file upload section.
-
 3. Wait for the AI to process the document — you will see:
-
-- Summary
-- Key Clauses
-- Risks / Flags
-- Confidence level & advice
+   - Summary
+   - Key Clauses
+   - Risks / Flags
+   - Confidence level & advice
 
 4. Ask questions in the chat section. Example:
-
-- “Can I terminate this contract early?”
-- “Are there any auto-renewal clauses?”
+   - “Can I terminate this contract early?”
+   - “Are there any auto-renewal clauses?”
 
 ## ⚙️ Notes & Tips
 
@@ -121,4 +115,9 @@ uvicorn app:app --reload
 
 ## 💻 Screenshots
 
+### summary and other parts
 <img width="1570" height="846" alt="image" src="https://github.com/user-attachments/assets/46669b0a-a1db-4500-bc5f-57cfd29830b3" />
+
+### chatting part
+<img width="1528" height="813" alt="image" src="https://github.com/user-attachments/assets/54aff81a-2249-4dc3-aaa1-67b3c6084fbc" />
+

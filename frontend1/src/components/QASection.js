@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import { askQuestion } from "../api";
+import ReactMarkdown from "react-markdown";
 
 export default function QASection() {
   const [question, setQuestion] = useState("");
@@ -7,10 +8,8 @@ export default function QASection() {
   const [loading, setLoading] = useState(false);
   const chatEndRef = useRef(null);
 
-  const scrollToBottom = () => {
+  const scrollToBottom = () =>
     chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  };
-
   useEffect(scrollToBottom, [messages]);
 
   const handleAsk = async () => {
@@ -22,8 +21,8 @@ export default function QASection() {
     setLoading(true);
 
     try {
-      const result = await askQuestion(userMessage.text);
-      const botMessage = { type: "bot", text: result.answer || "No answer" };
+      const result = await askQuestion(userMessage.text); // returns Markdown string
+      const botMessage = { type: "bot", text: result || "No answer" };
       setMessages((prev) => [...prev, botMessage]);
     } catch (err) {
       console.error(err);
@@ -79,7 +78,11 @@ export default function QASection() {
                 wordBreak: "break-word",
               }}
             >
-              {msg.text}
+              {msg.type === "bot" ? (
+                <ReactMarkdown>{msg.text}</ReactMarkdown>
+              ) : (
+                msg.text
+              )}
             </div>
           </div>
         ))}

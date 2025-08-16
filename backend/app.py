@@ -64,6 +64,7 @@ def gemini_summarize(text):
     }}
 
     Do not include any text outside of the JSON.
+    Use a professional way to give answers like using paragraphs, points, lists, or tables.
 
     Document:
     {text}
@@ -87,23 +88,16 @@ def gemini_summarize(text):
 def gemini_answer(question, context):
     """
     Use Gemini to answer user questions based on uploaded document.
+    Return structured Markdown for better readability.
     """
     prompt = f"""
     You are an AI legal assistant.
-    - Answer the user's question based strictly on the given document context.
-    - Be clear and concise.
+    - Answer the user's question strictly based on the given document.
+    - Use paragraphs, bullet points, numbered lists, or tables where appropriate.
+    - Be clear, professional, and user-friendly.
     - If uncertain, say "I'm not certain, please consult a lawyer."
-    - Behave in a user-friendly manner.
-    - Use a professional way to give answers like using paragraphs, points, lists, or tables.
-    - use paragraphs, points, lists, or tables to format the answer.
-
-    Return JSON only in this format:
-    {{
-      "answer": "Answer text here",
-      "confidence": "High/Medium/Low"
-    }}
-
-    Do not include any text outside of the JSON.
+    
+    Return ONLY the answer in Markdown format (no JSON, no extra text).
 
     Document:
     {context}
@@ -114,13 +108,9 @@ def gemini_answer(question, context):
     model = genai.GenerativeModel("gemini-2.5-flash")
     response = model.generate_content(prompt)
 
-    parsed = safe_json_loads(response.text)
-    if not parsed:
-        parsed = {
-            "answer": response.text.strip(),
-            "confidence": "Unknown"
-        }
-    return parsed
+    # Return raw Markdown string
+    return response.text.strip()
+
 
 @app.post("/upload-pdf/")
 async def upload_pdf(file: UploadFile = File(...)):

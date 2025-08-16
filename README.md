@@ -123,5 +123,5 @@ uvicorn app:app --reload
 
 ## Collabarators
 - Ashan Sanjana
-- 
-- 
+- Sasindu Chanaka
+- Chathuranga Gimhan

@@ -21,7 +21,7 @@ export default function QASection() {
     setLoading(true);
 
     try {
-      const result = await askQuestion(userMessage.text); // returns Markdown string
+      const result = await askQuestion(userMessage.text);
       const botMessage = { type: "bot", text: result || "No answer" };
       setMessages((prev) => [...prev, botMessage]);
     } catch (err) {
@@ -39,24 +39,28 @@ export default function QASection() {
   return (
     <div
       style={{
-        marginTop: "20px",
+        display: "flex",
+        flexDirection: "column",
+        flexGrow: 1,
         border: "1px solid #ccc",
         borderRadius: "10px",
-        padding: "10px",
         backgroundColor: "#fafafa",
+        padding: "10px",
       }}
     >
       <h3 style={{ marginBottom: "10px" }}>Document Q&A</h3>
 
       <div
         style={{
-          height: "300px",
+          flexGrow: 1,
+          minHeight: "400px",
+          maxHeight: "60vh",
           overflowY: "auto",
           padding: "10px",
           border: "1px solid #ddd",
           borderRadius: "8px",
-          marginBottom: "10px",
           backgroundColor: "#fff",
+          marginBottom: "10px",
         }}
       >
         {messages.map((msg, idx) => (
@@ -98,7 +102,7 @@ export default function QASection() {
           placeholder="Type your question..."
           style={{
             flexGrow: 1,
-            padding: "8px",
+            padding: "10px",
             borderRadius: "5px",
             border: "1px solid #ccc",
           }}
@@ -107,7 +111,7 @@ export default function QASection() {
         <button
           onClick={handleAsk}
           style={{
-            padding: "8px 16px",
+            padding: "10px 20px",
             backgroundColor: "#4caf50",
             color: "#fff",
             border: "none",
